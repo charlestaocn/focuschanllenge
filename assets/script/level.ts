@@ -12,6 +12,7 @@ import {
 } from "cc";
 import global from "./const/global";
 import levels from "./const/levels";
+import { LevelInfo } from "./const/levels";
 
 const { ccclass, property } = _decorator;
 
@@ -25,24 +26,25 @@ export class level extends Component {
 
   protected start(): void {
     this.initLevels();
+    director.preloadScene("game");
   }
 
   initLevels() {
-    levels.forEach((value: number, index: number, array: number[]) => {
+    levels.forEach((value: LevelInfo, index: number, array: LevelInfo[]) => {
       if (!this.levelPrefab) return;
       let levelNode = instantiate(this.levelPrefab);
-      levelNode.name = `level_${index}`;
+      levelNode.name = `level_${value.levelNum}`;
       levelNode.parent = this.levelContainer;
       let numLab = levelNode.getChildByName("lv_num").getComponent(Label);
-      numLab.string = `${value}`;
+      numLab.string = `${value.levelNum + 1}`;
       let currWidget = levelNode.getComponent(Widget);
       currWidget.target = this.levelContainer;
       currWidget.isAlignLeft = true;
       currWidget.isAlignTop = true;
-      let lineNum = (index / 4) | 0;
-      let itemNum = index % 4;
-      currWidget.left = 30 + itemNum * (30 + 150);
-      currWidget.top = 30 + lineNum * (30 + 150);
+      let lineNum = (index / 3) | 0;
+      let itemNum = index % 3;
+      currWidget.left = 59.5 + itemNum * (59.5 + 185);
+      currWidget.top = 59.5 + lineNum * (59.5 + 185);
     });
   }
 
